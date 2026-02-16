@@ -15,6 +15,7 @@
 
 📖 Full Guide: [Complete-Self-Hosting-Guide.md](Complete-Self-Hosting-Guide.md)
 
+
 ---
 
 ## 🎯 Why This Exists
