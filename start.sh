@@ -1,278 +1,85 @@
 #!/bin/bash
 
-# ╔═══════════════════════════════════════════════════════════════╗
-# ║                    TTY.FM STARTUP SCRIPT                      ║
-# ║         Personal Cloud Music System - Setup & Launch          ║
-# ╚═══════════════════════════════════════════════════════════════╝
+# TTY.FM Startup Script
+# Simple and straightforward server launcher
 
-set -e
+set -e  # Exit on any error
 
-# Colors for terminal output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-PURPLE='\033[0;35m'
-NC='\033[0m' # No Color
-
-# Get the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Setup directories
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BACKEND_DIR="$SCRIPT_DIR/backend"
 FRONTEND_DIR="$SCRIPT_DIR/frontend"
 MUSIC_DIR="$HOME/tty-fm/music"
 
-# Print styled header
-print_header() {
-    echo -e "${PURPLE}"
-    echo "┌───────────────────────────────────────┐"
-    echo "│         TTY.FM SYSTEM LOADER          │"
-    echo "│         ══════════════════════        │"
-    echo "└───────────────────────────────────────┘"
-    echo -e "${NC}"
-}
+echo "================================"
+echo "  TTY.FM Startup"
+echo "================================"
+echo ""
 
-# Print status message
-log_info() {
-    echo -e "${PURPLE}[TTY.FM]${NC} $1"
-}
+# Check Node.js
+if ! command -v node &> /dev/null; then
+  echo "[ERROR] Node.js not found"
+  echo "Install from: https://nodejs.org (v18+)"
+  exit 1
+fi
+echo "[OK] Node.js $(node --version)"
 
-log_success() {
-    echo -e "${GREEN}[✓]${NC} $1"
-}
+# Check npm
+if ! command -v npm &> /dev/null; then
+  echo "[ERROR] npm not found"
+  exit 1
+fi
+echo "[OK] npm $(npm --version)"
 
-log_warning() {
-    echo -e "${YELLOW}[!]${NC} $1"
-}
+# Install backend dependencies (only if needed)
+echo ""
+echo "[SETUP] Backend dependencies..."
+cd "$BACKEND_DIR"
+npm install --silent 2>/dev/null
+echo "[OK] Backend ready"
 
-log_error() {
-    echo -e "${RED}[✗]${NC} $1"
-}
+# Install frontend dependencies (only if needed)
+echo "[SETUP] Frontend dependencies..."
+cd "$FRONTEND_DIR"
+npm install --silent 2>/dev/null
+echo "[OK] Frontend ready"
 
-# Check if a command exists
-command_exists() {
-    command -v "$1" &> /dev/null
-}
+# Create music directory (idempotent)
+echo ""
+mkdir -p "$MUSIC_DIR"
+echo "[OK] Music folder: $MUSIC_DIR"
 
-# Detect OS
-detect_os() {
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command_exists pacman; then
-            echo "arch"
-        elif command_exists apt; then
-            echo "debian"
-        elif command_exists dnf; then
-            echo "fedora"
-        else
-            echo "linux"
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "macos"
-    else
-        echo "unknown"
-    fi
-}
+# Start servers
+echo ""
+echo "================================"
+echo "  Starting Servers"
+echo "================================"
+echo ""
 
-# Install Node.js based on OS
-# Check and install Node.js
-check_nodejs() {
-    log_info "Checking for Node.js..."
-    
-    if command_exists node; then
-        local node_version=$(node --version)
-        log_success "Node.js found: $node_version"
-        
-        # Check if version is >= 18
-        local major_version=$(echo $node_version | cut -d'.' -f1 | tr -d 'v')
-        if [ "$major_version" -lt 18 ]; then
-            log_error "Node.js version is below 18. Please upgrade Node.js on this server."
-            exit 1
-        fi
-    else
-        log_error "Node.js not found. Please install Node.js (>=18) and rerun."
-        exit 1
-    fi
-}
+cd "$BACKEND_DIR"
+echo "[RUN] Backend on http://localhost:3001"
+npm start &
+BACKEND_PID=$!
 
-# Check and install npm
-check_npm() {
-    log_info "Checking for npm..."
-    
-    if command_exists npm; then
-        local npm_version=$(npm --version)
-        log_success "npm found: v$npm_version"
-    else
-        log_error "npm not found. This should have been installed with Node.js"
-        exit 1
-    fi
-}
+cd "$FRONTEND_DIR"
+echo "[RUN] Frontend on http://localhost:3000"
+npm run dev -- --host &
+FRONTEND_PID=$!
 
-# Install backend dependencies
-install_backend_deps() {
-    log_info "Checking backend dependencies..."
-    
-    if [ -d "$BACKEND_DIR/node_modules" ]; then
-        log_success "Backend dependencies already installed"
-    else
-        log_info "Installing backend dependencies..."
-        cd "$BACKEND_DIR"
-        npm install
-        log_success "Backend dependencies installed"
-    fi
-}
+echo ""
+echo "================================"
+echo "  TTY.FM Running"
+echo "================================"
+echo "  Backend:  http://localhost:3001"
+echo "  Frontend: http://localhost:3000"
+echo "  Music:    $MUSIC_DIR"
+echo ""
+echo "  Press Ctrl+C to stop"
+echo "================================"
+echo ""
 
-# Install frontend dependencies
-install_frontend_deps() {
-    log_info "Checking frontend dependencies..."
-    
-    if [ -d "$FRONTEND_DIR/node_modules" ]; then
-        log_success "Frontend dependencies already installed"
-    else
-        log_info "Installing frontend dependencies..."
-        cd "$FRONTEND_DIR"
-        npm install
-        log_success "Frontend dependencies installed"
-    fi
-}
+# Handle Ctrl+C
+trap "kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit 0" SIGINT SIGTERM
 
-# Create music directory
-setup_music_dir() {
-    log_info "Checking music directory..."
-    
-    if [ -d "$MUSIC_DIR" ]; then
-        log_success "Music directory exists: $MUSIC_DIR"
-    else
-        log_info "Creating music directory..."
-        mkdir -p "$MUSIC_DIR"
-        log_success "Music directory created: $MUSIC_DIR"
-    fi
-    
-    # Count songs
-    local song_count=$(find "$MUSIC_DIR" -type f \( -name "*.mp3" -o -name "*.wav" -o -name "*.ogg" -o -name "*.opus" -o -name "*.m4a" -o -name "*.flac" \) 2>/dev/null | wc -l | tr -d ' ')
-    log_info "Found $song_count song(s) in library"
-}
-
-# Kill any existing processes on our ports
-cleanup_ports() {
-    log_info "Checking for processes on ports 3000 and 3001..."
-    
-    if ! command_exists lsof; then
-        log_warning "lsof not found; skipping port cleanup"
-        return
-    fi
-    
-    # Kill process on port 3001 (backend)
-    if lsof -ti:3001 &> /dev/null; then
-        log_warning "Killing existing process on port 3001..."
-        lsof -ti:3001 | xargs kill -9 2>/dev/null || true
-    fi
-    
-    # Kill process on port 3000 (frontend)
-    if lsof -ti:3000 &> /dev/null; then
-        log_warning "Killing existing process on port 3000..."
-        lsof -ti:3000 | xargs kill -9 2>/dev/null || true
-    fi
-    
-    log_success "Ports cleared"
-}
-
-# Check if port is listening
-is_port_listening() {
-    if command_exists nc; then
-        nc -z localhost "$1" 2>/dev/null
-        return $?
-    elif command_exists lsof; then
-        lsof -i ":$1" &>/dev/null
-        return $?
-    else
-        return 0  # Can't check, assume OK
-    fi
-}
-
-# Start the servers
-start_servers() {
-    echo ""
-    echo -e "${PURPLE}┌───────────────────────────────────────┐${NC}"
-    echo -e "${PURPLE}│         STARTING TTY.FM SERVERS       │${NC}"
-    echo -e "${PURPLE}└───────────────────────────────────────┘${NC}"
-    echo ""
-    
-    # Start backend in background
-    log_info "Starting backend server on port 3001..."
-    cd "$BACKEND_DIR"
-    npm start &
-    BACKEND_PID=$!
-    sleep 2
-    
-    # Verify backend started
-    if ! is_port_listening 3001; then
-        log_error "Backend failed to start on port 3001"
-        log_error "Check: cd backend && node src/server.js"
-        kill $BACKEND_PID 2>/dev/null
-        exit 1
-    fi
-    log_success "Backend is running on port 3001"
-    
-    # Start frontend in background
-    log_info "Starting frontend server on port 3000..."
-    cd "$FRONTEND_DIR"
-    npm run dev -- --host &
-    FRONTEND_PID=$!
-    sleep 3
-    
-    # Verify frontend started
-    if ! is_port_listening 3000; then
-        log_warning "Frontend may have failed to start. Check output above."
-    else
-        log_success "Frontend is running on port 3000"
-    fi
-    
-    echo ""
-    echo -e "${GREEN}┌───────────────────────────────────────┐${NC}"
-    echo -e "${GREEN}│         TTY.FM IS NOW ONLINE!         │${NC}"
-    echo -e "${GREEN}├───────────────────────────────────────┤${NC}"
-    echo -e "${GREEN}│  Backend:  http://localhost:3001      │${NC}"
-    echo -e "${GREEN}│  Frontend: http://localhost:3000      │${NC}"
-    echo -e "${GREEN}│                                       │${NC}"
-    echo -e "${GREEN}│  Music folder: ~/tty-fm/music         │${NC}"
-    echo -e "${GREEN}│                                       │${NC}"
-    echo -e "${GREEN}│  Press Ctrl+C to stop servers         │${NC}"
-    echo -e "${GREEN}└───────────────────────────────────────┘${NC}"
-    echo ""
-    
-    # Handle graceful shutdown
-    trap 'log_info "Shutting down..."; kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit 0' SIGINT SIGTERM
-    
-    # Wait for both processes
-    wait
-}
-
-# Main execution
-main() {
-    print_header
-    
-    log_info "Detected OS: $(detect_os)"
-    echo ""
-    
-    # Step 1: Check Node.js
-    check_nodejs
-    
-    # Step 2: Check npm
-    check_npm
-    
-    # Step 3: Install backend dependencies
-    install_backend_deps
-    
-    # Step 4: Install frontend dependencies
-    install_frontend_deps
-    
-    # Step 5: Setup music directory
-    setup_music_dir
-    
-    # Step 6: Cleanup ports
-    cleanup_ports
-    
-    # Step 7: Start servers
-    start_servers
-}
-
-# Run main function
-main
+# Wait for processes
+wait
