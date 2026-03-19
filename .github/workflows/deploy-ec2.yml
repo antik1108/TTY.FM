@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - antik-laptop
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ec2
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy and restart on EC2
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Deploy and restart service on EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd /home/ubuntu/apps/tty.fm
+
+            git fetch --all --prune
+            git checkout antik-laptop
+            git reset --hard origin/antik-laptop
+
+            npm --prefix backend ci
+            npm --prefix frontend ci
+            npm --prefix frontend run build
+
+            sudo systemctl restart ttyfm-backend
+            sudo systemctl is-active --quiet ttyfm-backend
+            sudo systemctl status ttyfm-backend --no-pager
