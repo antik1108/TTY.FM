@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/backend"
+    schedule:
+      interval: weekly
+    target-branch: antik-laptop
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps
+
+  - package-ecosystem: npm
+    directory: "/frontend"
+    schedule:
+      interval: weekly
+    target-branch: antik-laptop
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps
