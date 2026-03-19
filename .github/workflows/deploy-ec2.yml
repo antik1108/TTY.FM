@@ -18,7 +18,7 @@ jobs:
     env:
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USER: ${{ secrets.EC2_USER }}
-      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+      EC2_SSH_KEY_B64: ${{ secrets.EC2_SSH_KEY_B64 }}
       EC2_PORT: ${{ secrets.EC2_PORT }}
 
     steps:
@@ -27,7 +27,7 @@ jobs:
           set -euo pipefail
           missing=0
 
-          for name in EC2_HOST EC2_USER EC2_SSH_KEY; do
+          for name in EC2_HOST EC2_USER EC2_SSH_KEY_B64; do
             if [ -z "${!name}" ]; then
               echo "::error::Missing required secret: $name"
               missing=1
@@ -39,11 +39,17 @@ jobs:
           fi
 
       - name: Deploy and restart service on EC2
+        run: |
+          set -euo pipefail
+          echo "$EC2_SSH_KEY_B64" | base64 --decode > /tmp/ec2_ssh_key
+          chmod 600 /tmp/ec2_ssh_key
+
+      - name: Deploy and restart service on EC2
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ env.EC2_HOST }}
           username: ${{ env.EC2_USER }}
-          key: ${{ env.EC2_SSH_KEY }}
+          key_path: /tmp/ec2_ssh_key
           port: ${{ env.EC2_PORT }}
           script_stop: true
           script: |
