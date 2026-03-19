@@ -6,11 +6,11 @@ test.describe('TTY.FM App', () => {
 
     // Check for main branding
     await expect(page.getByText('TTY.FM')).toBeVisible();
-    
+
     // Check for header stats
     await expect(page.getByText('Latency')).toBeVisible();
     await expect(page.getByText('Buffer_State')).toBeVisible();
-    
+
     // Check for main sections
     await expect(page.getByText('Core Process Library')).toBeVisible();
   });
@@ -20,7 +20,7 @@ test.describe('TTY.FM App', () => {
 
     // Wait for stats to load
     await page.waitForSelector('text=OPTIMIZED', { timeout: 5000 });
-    
+
     // Check node load is displayed
     const nodeLoadText = await page.getByText(/%$/).first();
     await expect(nodeLoadText).toBeVisible();
@@ -42,7 +42,7 @@ test.describe('TTY.FM App', () => {
     // Find and click refresh button
     const refreshButton = page.getByText('Refresh');
     await refreshButton.click();
-    
+
     // Should not crash (basic smoke test)
     await expect(page.getByText('TTY.FM')).toBeVisible();
   });
@@ -58,7 +58,7 @@ test.describe('TTY.FM App', () => {
 
     // Click to open sidebar
     await menuButton.click();
-    
+
     // Sidebar should be visible now
     await expect(page.getByText('FileSystem Tree')).toBeVisible();
   });

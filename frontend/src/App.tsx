@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
@@ -15,7 +21,7 @@ const INITIAL_STATS: SystemStats = {
   status: 'OPTIMIZED',
   uptime: '00:00:00',
   nodeLoad: 0,
-  nodeName: 'LOCAL_NODE'
+  nodeName: 'LOCAL_NODE',
 };
 
 const INSIGHT_TEMPLATES = [
@@ -23,7 +29,7 @@ const INSIGHT_TEMPLATES = [
   'NEURAL_SIGNATURE_OK: RHYTHM_GRID LOCKED.',
   'SPECTRAL_SCAN CLEAN: SUB_BASS THRESHOLD STABLE.',
   'NODE_FEEDBACK: AUDIO_MATRIX STABLE UNDER LOAD.',
-  'ENCRYPTED_STREAM VERIFIED: SIGNAL TO NOISE OPTIMAL.'
+  'ENCRYPTED_STREAM VERIFIED: SIGNAL TO NOISE OPTIMAL.',
 ];
 
 const formatBytes = (bytes?: number) => {
@@ -51,7 +57,9 @@ const App: React.FC = () => {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [uncategorizedCount, setUncategorizedCount] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.LIBRARY);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(
+    null
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(80);
@@ -59,12 +67,16 @@ const App: React.FC = () => {
   const [duration, setDuration] = useState(0);
   const [logs, setLogs] = useState<SystemLog[]>([]);
   const [stats, setStats] = useState<SystemStats>(INITIAL_STATS);
-  const [neuralInsight, setNeuralInsight] = useState('SYSTEM_IDLE: AWAITING_INPUT...');
+  const [neuralInsight, setNeuralInsight] = useState(
+    'SYSTEM_IDLE: AWAITING_INPUT...'
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [mobileView, setMobileView] = useState<'library' | 'visualizer'>('library');
+  const [mobileView, setMobileView] = useState<'library' | 'visualizer'>(
+    'library'
+  );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -73,7 +85,7 @@ const App: React.FC = () => {
       id: Math.random().toString(36).slice(2, 10),
       timestamp: new Date().toLocaleTimeString('en-GB', { hour12: false }),
       level,
-      message
+      message,
     };
     setLogs((prev) => [...prev.slice(-20), newLog]);
   }, []);
@@ -82,7 +94,7 @@ const App: React.FC = () => {
     return data.map((song) => ({
       ...song,
       size: formatBytes(typeof song.size === 'number' ? song.size : undefined),
-      genre: song.genre || 'AUDIO'
+      genre: song.genre || 'AUDIO',
     }));
   }, []);
 
@@ -92,29 +104,36 @@ const App: React.FC = () => {
     setUncategorizedCount(data.uncategorizedCount);
   }, []);
 
-  const fetchLibrary = useCallback(async (playlistName?: string | null) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      let library: Song[] = [];
-      if (playlistName === null) {
-        library = await LibraryService.getSongs();
-        library = library.filter((song) => !song.playlist);
-      } else if (playlistName) {
-        library = await LibraryService.getPlaylistSongs(playlistName);
-      } else {
-        library = await LibraryService.getSongs();
+  const fetchLibrary = useCallback(
+    async (playlistName?: string | null) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        let library: Song[] = [];
+        if (playlistName === null) {
+          library = await LibraryService.getSongs();
+          library = library.filter((song) => !song.playlist);
+        } else if (playlistName) {
+          library = await LibraryService.getPlaylistSongs(playlistName);
+        } else {
+          library = await LibraryService.getSongs();
+        }
+        const normalized = normalizeSongs(library);
+        setSongs(normalized);
+        setCurrentSong((prev) =>
+          prev && normalized.find((song) => song.id === prev.id)
+            ? prev
+            : normalized[0] || null
+        );
+      } catch (err) {
+        console.error(err);
+        setError('FATAL: CONNECTION_REFUSED_TO_MAINFRAME');
+      } finally {
+        setIsLoading(false);
       }
-      const normalized = normalizeSongs(library);
-      setSongs(normalized);
-      setCurrentSong((prev) => prev && normalized.find((song) => song.id === prev.id) ? prev : normalized[0] || null);
-    } catch (err) {
-      console.error(err);
-      setError('FATAL: CONNECTION_REFUSED_TO_MAINFRAME');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [normalizeSongs]);
+    },
+    [normalizeSongs]
+  );
 
   const refreshSystemStats = useCallback(async () => {
     try {
@@ -125,7 +144,7 @@ const App: React.FC = () => {
         status: nodeLoad > 70 ? 'THROTTLED' : 'OPTIMIZED',
         uptime: raw.uptime,
         nodeLoad,
-        nodeName: `${raw.platform.toUpperCase()}-${raw.arch.toUpperCase()}`
+        nodeName: `${raw.platform.toUpperCase()}-${raw.arch.toUpperCase()}`,
       });
     } catch (err) {
       console.error(err);
@@ -173,7 +192,8 @@ const App: React.FC = () => {
       setMobileView('visualizer');
     }
     addLog('PROCESS', `Streaming PID ${song.hexId} (Encrypted).`);
-    const insight = INSIGHT_TEMPLATES[Math.floor(Math.random() * INSIGHT_TEMPLATES.length)];
+    const insight =
+      INSIGHT_TEMPLATES[Math.floor(Math.random() * INSIGHT_TEMPLATES.length)];
     setNeuralInsight(insight);
     addLog('AI', `Neural insight generated for ${song.hexId}`);
   };
@@ -246,7 +266,9 @@ const App: React.FC = () => {
   const mainTitle = useMemo(() => {
     if (viewMode === ViewMode.UPLOAD) return 'Upload Interface';
     if (viewMode === ViewMode.PLAYLIST) {
-      return selectedPlaylist ? `Playlist: ${selectedPlaylist.name}` : 'Playlist: UNCATEGORIZED';
+      return selectedPlaylist
+        ? `Playlist: ${selectedPlaylist.name}`
+        : 'Playlist: UNCATEGORIZED';
     }
     return 'Core Process Library';
   }, [viewMode, selectedPlaylist]);
@@ -257,7 +279,7 @@ const App: React.FC = () => {
 
   // Handle mobile View Toggling
   const handleToggleMobileView = () => {
-    setMobileView((prev) => prev === 'library' ? 'visualizer' : 'library');
+    setMobileView((prev) => (prev === 'library' ? 'visualizer' : 'library'));
   };
 
   const handleRenamePlaylist = async (newName: string) => {
@@ -268,16 +290,25 @@ const App: React.FC = () => {
         return;
       }
 
-      const result = await LibraryService.renamePlaylist(selectedPlaylist.name, newName);
+      const result = await LibraryService.renamePlaylist(
+        selectedPlaylist.name,
+        newName
+      );
 
       // Update local state
-      setPlaylists((prev) => prev.map((pl) =>
-        pl.id === selectedPlaylist.id
-          ? { ...pl, name: result.newName, id: result.newName.toLowerCase() }
-          : pl
-      ));
+      setPlaylists((prev) =>
+        prev.map((pl) =>
+          pl.id === selectedPlaylist.id
+            ? { ...pl, name: result.newName, id: result.newName.toLowerCase() }
+            : pl
+        )
+      );
 
-      setSelectedPlaylist((prev) => prev ? { ...prev, name: result.newName, id: result.newName.toLowerCase() } : null);
+      setSelectedPlaylist((prev) =>
+        prev
+          ? { ...prev, name: result.newName, id: result.newName.toLowerCase() }
+          : null
+      );
       addLog('SYS', `Playlist renamed: ${result.oldName} -> ${result.newName}`);
     } catch (err) {
       console.error(err);
@@ -287,10 +318,7 @@ const App: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-terminal-bg relative">
-      <Header
-        stats={stats}
-        onMenuClick={() => setIsSidebarOpen(true)}
-      />
+      <Header stats={stats} onMenuClick={() => setIsSidebarOpen(true)} />
 
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         <Sidebar
@@ -309,11 +337,13 @@ const App: React.FC = () => {
 
         <main className="flex-1 flex flex-col lg:grid lg:grid-cols-12 overflow-hidden relative">
           {/* Main Layout Area - Library/Upload */}
-          <section className={`
+          <section
+            className={`
             flex-col border-r-2 border-terminal-border bg-terminal-bg
             lg:col-span-8 lg:flex 
             ${mobileView === 'library' ? 'flex absolute inset-0 lg:static' : 'hidden lg:flex'}
-          `}>
+          `}
+          >
             {viewMode === ViewMode.UPLOAD ? (
               <UploadPanel playlists={playlists} onUpload={handleUpload} />
             ) : (
@@ -324,7 +354,11 @@ const App: React.FC = () => {
                 onSelect={handleSongSelect}
                 isLoading={isLoading}
                 error={error}
-                onRename={viewMode === ViewMode.PLAYLIST && selectedPlaylist ? handleRenamePlaylist : undefined}
+                onRename={
+                  viewMode === ViewMode.PLAYLIST && selectedPlaylist
+                    ? handleRenamePlaylist
+                    : undefined
+                }
               />
             )}
             <div className="h-48 border-t-2 border-terminal-border bg-black shrink-0 hidden lg:block">
@@ -333,12 +367,18 @@ const App: React.FC = () => {
           </section>
 
           {/* Right Panel - Visualizer */}
-          <section className={`
+          <section
+            className={`
             flex-col bg-black/40
             lg:col-span-4 lg:flex
             ${mobileView === 'visualizer' ? 'flex absolute inset-0 lg:static z-20 bg-terminal-bg' : 'hidden lg:flex'}
-          `}>
-            <RightPanel currentSong={currentSong} neuralInsight={neuralInsight} isPlaying={isPlaying} />
+          `}
+          >
+            <RightPanel
+              currentSong={currentSong}
+              neuralInsight={neuralInsight}
+              isPlaying={isPlaying}
+            />
           </section>
         </main>
       </div>
@@ -357,12 +397,16 @@ const App: React.FC = () => {
 
       <audio
         ref={audioRef}
-        src={currentSong ? LibraryService.getStreamUrl(currentSong.id) : undefined}
+        src={
+          currentSong ? LibraryService.getStreamUrl(currentSong.id) : undefined
+        }
         onTimeUpdate={() => {
           if (!audioRef.current || !audioRef.current.duration) return;
           setCurrentTime(audioRef.current.currentTime);
           setDuration(audioRef.current.duration);
-          setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+          setProgress(
+            (audioRef.current.currentTime / audioRef.current.duration) * 100
+          );
         }}
         onLoadedMetadata={() => {
           if (!audioRef.current) return;

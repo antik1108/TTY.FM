@@ -1,11 +1,14 @@
-
 const path = require('path');
 const fs = require('fs');
 
 const BASE_DIR = path.resolve(__dirname, '..', '..');
-const DATA_DIR = path.join(BASE_DIR, "data");
+const DATA_DIR = path.join(BASE_DIR, 'data');
 // User configured music directory (contains playlist folders)
-const MUSIC_DIR = path.join(process.env.HOME || process.env.USERPROFILE || '', "tty-fm", "music");
+const MUSIC_DIR = path.join(
+  process.env.HOME || process.env.USERPROFILE || '',
+  'tty-fm',
+  'music'
+);
 
 // Ensure directories exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -16,28 +19,29 @@ const getPlaylistPath = (playlistName) => path.join(MUSIC_DIR, playlistName);
 
 // Helper to ensure playlist folder exists
 const ensurePlaylistExists = (playlistName) => {
-    const playlistPath = getPlaylistPath(playlistName);
-    if (!fs.existsSync(playlistPath)) {
-        fs.mkdirSync(playlistPath, { recursive: true });
-    }
-    return playlistPath;
+  const playlistPath = getPlaylistPath(playlistName);
+  if (!fs.existsSync(playlistPath)) {
+    fs.mkdirSync(playlistPath, { recursive: true });
+  }
+  return playlistPath;
 };
 
 // Get all playlist folders
 const getPlaylistFolders = () => {
-    if (!fs.existsSync(MUSIC_DIR)) return [];
-    return fs.readdirSync(MUSIC_DIR, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
+  if (!fs.existsSync(MUSIC_DIR)) return [];
+  return fs
+    .readdirSync(MUSIC_DIR, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
 };
 
 module.exports = {
-    BASE_DIR,
-    DATA_DIR,
-    MUSIC_DIR,
-    LIBRARY_FILE: path.join(DATA_DIR, 'library.json'),
-    PLAYLISTS_FILE: path.join(DATA_DIR, 'playlists.json'),
-    getPlaylistPath,
-    ensurePlaylistExists,
-    getPlaylistFolders
+  BASE_DIR,
+  DATA_DIR,
+  MUSIC_DIR,
+  LIBRARY_FILE: path.join(DATA_DIR, 'library.json'),
+  PLAYLISTS_FILE: path.join(DATA_DIR, 'playlists.json'),
+  getPlaylistPath,
+  ensurePlaylistExists,
+  getPlaylistFolders,
 };

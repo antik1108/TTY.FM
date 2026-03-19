@@ -6,7 +6,7 @@ import { Playlist, Song, ViewMode } from '../../src/types';
 describe('Navigation Flow (Integration)', () => {
   const mockPlaylists: Playlist[] = [
     { id: 'synthwave', name: 'Synthwave', songCount: 5, icon: 'folder' },
-    { id: 'chillhop', name: 'Chillhop', songCount: 8, icon: 'folder' }
+    { id: 'chillhop', name: 'Chillhop', songCount: 8, icon: 'folder' },
   ];
 
   const mockLibrarySongs: Song[] = [
@@ -18,7 +18,7 @@ describe('Navigation Flow (Integration)', () => {
       duration: '03:45',
       durationSeconds: 225,
       size: '3.5 MB',
-      genre: 'SYNTH'
+      genre: 'SYNTH',
     },
     {
       id: '2',
@@ -28,8 +28,8 @@ describe('Navigation Flow (Integration)', () => {
       duration: '04:20',
       durationSeconds: 260,
       size: '4.2 MB',
-      genre: 'AMBIENT'
-    }
+      genre: 'AMBIENT',
+    },
   ];
 
   const mockPlaylistSongs: Song[] = [
@@ -42,8 +42,8 @@ describe('Navigation Flow (Integration)', () => {
       durationSeconds: 210,
       size: '3.2 MB',
       genre: 'SYNTH',
-      playlist: 'Synthwave'
-    }
+      playlist: 'Synthwave',
+    },
   ];
 
   it('navigates from library to playlist and back', () => {
@@ -166,7 +166,9 @@ describe('Navigation Flow (Integration)', () => {
     const newButton = screen.getByText('New');
     fireEvent.click(newButton);
 
-    expect(global.prompt).toHaveBeenCalledWith('Playlist name (A-Z, 0-9, underscore):');
+    expect(global.prompt).toHaveBeenCalledWith(
+      'Playlist name (A-Z, 0-9, underscore):'
+    );
     expect(onCreatePlaylist).toHaveBeenCalledWith('NewPlaylist');
 
     // Click refresh button
@@ -203,6 +205,8 @@ describe('Navigation Flow (Integration)', () => {
       />
     );
 
-    expect(screen.getByText('FATAL: CONNECTION_REFUSED_TO_MAINFRAME')).toBeInTheDocument();
+    expect(
+      screen.getByText('FATAL: CONNECTION_REFUSED_TO_MAINFRAME')
+    ).toBeInTheDocument();
   });
 });

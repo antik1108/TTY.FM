@@ -20,25 +20,24 @@ describe('API Integration Tests', () => {
       time: '14:30:00',
       uptime: '2d 5h 30m',
       platform: 'darwin',
-      arch: 'arm64'
+      arch: 'arm64',
     };
 
-    (SystemService.getStats as jest.MockedFunction<typeof SystemService.getStats>).mockResolvedValue(mockStats);
+    (
+      SystemService.getStats as jest.MockedFunction<
+        typeof SystemService.getStats
+      >
+    ).mockResolvedValue(mockStats);
 
     const derivedStats: SystemStats = {
       latency: Math.round(mockStats.cpu / 2) + 10,
       status: mockStats.cpu > 70 ? 'THROTTLED' : 'OPTIMIZED',
       uptime: mockStats.uptime,
       nodeLoad: mockStats.cpu,
-      nodeName: `${mockStats.platform.toUpperCase()}-${mockStats.arch.toUpperCase()}`
+      nodeName: `${mockStats.platform.toUpperCase()}-${mockStats.arch.toUpperCase()}`,
     };
 
-    render(
-      <Header
-        stats={derivedStats}
-        onMenuClick={() => {}}
-      />
-    );
+    render(<Header stats={derivedStats} onMenuClick={() => {}} />);
 
     expect(screen.getByText('OPTIMIZED')).toBeInTheDocument();
     expect(screen.getByText('45%')).toBeInTheDocument();
@@ -55,11 +54,15 @@ describe('API Integration Tests', () => {
         duration: '03:45',
         durationSeconds: 225,
         size: 3500000,
-        genre: 'SYNTH'
-      }
+        genre: 'SYNTH',
+      },
     ];
 
-    (LibraryService.getSongs as jest.MockedFunction<typeof LibraryService.getSongs>).mockResolvedValue(mockSongs);
+    (
+      LibraryService.getSongs as jest.MockedFunction<
+        typeof LibraryService.getSongs
+      >
+    ).mockResolvedValue(mockSongs);
 
     const songs = await LibraryService.getSongs();
 
@@ -69,25 +72,33 @@ describe('API Integration Tests', () => {
   });
 
   it('handles API error gracefully', async () => {
-    (LibraryService.getSongs as jest.MockedFunction<typeof LibraryService.getSongs>).mockRejectedValue(
+    (
+      LibraryService.getSongs as jest.MockedFunction<
+        typeof LibraryService.getSongs
+      >
+    ).mockRejectedValue(
       new Error('Failed to fetch library: 500 Internal Server Error')
     );
 
-    await expect(LibraryService.getSongs()).rejects.toThrow('Failed to fetch library');
+    await expect(LibraryService.getSongs()).rejects.toThrow(
+      'Failed to fetch library'
+    );
   });
 
   it('fetches playlists and displays count', async () => {
     const mockPlaylistsResponse = {
       playlists: [
         { id: 'synthwave', name: 'Synthwave', songCount: 5 },
-        { id: 'chillhop', name: 'Chillhop', songCount: 8 }
+        { id: 'chillhop', name: 'Chillhop', songCount: 8 },
       ],
-      uncategorizedCount: 3
+      uncategorizedCount: 3,
     };
 
-    (LibraryService.getPlaylists as jest.MockedFunction<typeof LibraryService.getPlaylists>).mockResolvedValue(
-      mockPlaylistsResponse
-    );
+    (
+      LibraryService.getPlaylists as jest.MockedFunction<
+        typeof LibraryService.getPlaylists
+      >
+    ).mockResolvedValue(mockPlaylistsResponse);
 
     const result = await LibraryService.getPlaylists();
 
@@ -100,12 +111,14 @@ describe('API Integration Tests', () => {
     const mockPlaylist = {
       id: 'newplaylist',
       name: 'NewPlaylist',
-      songCount: 0
+      songCount: 0,
     };
 
-    (LibraryService.createPlaylist as jest.MockedFunction<typeof LibraryService.createPlaylist>).mockResolvedValue(
-      mockPlaylist
-    );
+    (
+      LibraryService.createPlaylist as jest.MockedFunction<
+        typeof LibraryService.createPlaylist
+      >
+    ).mockResolvedValue(mockPlaylist);
 
     const result = await LibraryService.createPlaylist('NewPlaylist');
 
@@ -121,7 +134,11 @@ describe('API Integration Tests', () => {
   });
 
   it('refreshes library successfully', async () => {
-    (LibraryService.refreshLibrary as jest.MockedFunction<typeof LibraryService.refreshLibrary>).mockResolvedValue();
+    (
+      LibraryService.refreshLibrary as jest.MockedFunction<
+        typeof LibraryService.refreshLibrary
+      >
+    ).mockResolvedValue();
 
     await LibraryService.refreshLibrary();
 

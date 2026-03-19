@@ -10,7 +10,7 @@ export const mockSongs: Song[] = [
     duration: '03:45',
     durationSeconds: 225,
     size: '3.5 MB',
-    genre: 'SYNTH'
+    genre: 'SYNTH',
   },
   {
     id: '2',
@@ -20,7 +20,7 @@ export const mockSongs: Song[] = [
     duration: '04:20',
     durationSeconds: 260,
     size: '4.2 MB',
-    genre: 'AMBIENT'
+    genre: 'AMBIENT',
   },
   {
     id: '3',
@@ -30,8 +30,8 @@ export const mockSongs: Song[] = [
     duration: '03:30',
     durationSeconds: 210,
     size: '3.2 MB',
-    genre: 'SYNTH'
-  }
+    genre: 'SYNTH',
+  },
 ];
 
 export const mockPlaylists: Playlist[] = [
@@ -39,20 +39,20 @@ export const mockPlaylists: Playlist[] = [
     id: 'synthwave',
     name: 'Synthwave',
     songCount: 5,
-    icon: 'folder'
+    icon: 'folder',
   },
   {
     id: 'chillhop',
     name: 'Chillhop',
     songCount: 8,
-    icon: 'folder'
+    icon: 'folder',
   },
   {
     id: 'ambient',
     name: 'Ambient',
     songCount: 3,
-    icon: 'folder'
-  }
+    icon: 'folder',
+  },
 ];
 
 export const mockPlaylistSongs: Song[] = [
@@ -65,7 +65,7 @@ export const mockPlaylistSongs: Song[] = [
     durationSeconds: 210,
     size: '3.2 MB',
     genre: 'SYNTH',
-    playlist: 'Synthwave'
+    playlist: 'Synthwave',
   },
   {
     id: '11',
@@ -76,13 +76,13 @@ export const mockPlaylistSongs: Song[] = [
     durationSeconds: 255,
     size: '3.8 MB',
     genre: 'SYNTH',
-    playlist: 'Synthwave'
-  }
+    playlist: 'Synthwave',
+  },
 ];
 
 export const mockPlaylistsResponse: PlaylistsResponse = {
   playlists: mockPlaylists,
-  uncategorizedCount: 3
+  uncategorizedCount: 3,
 };
 
 export const mockSystemStats: SystemStats = {
@@ -90,7 +90,7 @@ export const mockSystemStats: SystemStats = {
   status: 'OPTIMIZED',
   uptime: '2d 5h 30m',
   nodeLoad: 45,
-  nodeName: 'DARWIN-ARM64'
+  nodeName: 'DARWIN-ARM64',
 };
 
 export const mockRawSystemStats = {
@@ -99,5 +99,5 @@ export const mockRawSystemStats = {
   time: '14:30:00',
   uptime: '2d 5h 30m',
   platform: 'darwin',
-  arch: 'arm64'
+  arch: 'arm64',
 };

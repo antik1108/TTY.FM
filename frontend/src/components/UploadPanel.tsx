@@ -41,12 +41,16 @@ const UploadPanel: React.FC<UploadPanelProps> = ({ playlists, onUpload }) => {
       <div className="absolute inset-0 pointer-events-none opacity-5 bg-[linear-gradient(rgba(144,70,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(144,70,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
       <div className="flex items-center gap-2 mb-6 border-b border-terminal-border pb-2">
-        <span className="text-xs text-gray-500 uppercase">[ Upload Interface ]</span>
+        <span className="text-xs text-gray-500 uppercase">
+          [ Upload Interface ]
+        </span>
       </div>
 
       <div className="flex flex-col gap-8 max-w-xl mx-auto w-full mt-10 z-10">
         <div className="border border-terminal-border p-6 relative">
-          <label className="block mb-4 text-xs font-bold opacity-80 uppercase">&gt; Select_Audio_Source_File</label>
+          <label className="block mb-4 text-xs font-bold opacity-80 uppercase">
+            &gt; Select_Audio_Source_File
+          </label>
           <input
             type="file"
             accept="audio/*"
@@ -56,7 +60,9 @@ const UploadPanel: React.FC<UploadPanelProps> = ({ playlists, onUpload }) => {
         </div>
 
         <div className="border border-terminal-border p-4">
-          <label className="block mb-2 text-[10px] uppercase text-gray-500">Target Playlist</label>
+          <label className="block mb-2 text-[10px] uppercase text-gray-500">
+            Target Playlist
+          </label>
           <select
             value={selectedPlaylist}
             onChange={(event) => setSelectedPlaylist(event.target.value)}
@@ -75,7 +81,9 @@ const UploadPanel: React.FC<UploadPanelProps> = ({ playlists, onUpload }) => {
           <div className="text-[10px] uppercase font-bold tracking-widest border-b border-terminal-border pb-1 mb-2">
             STATUS_LOG
           </div>
-          <div className="font-mono text-sm opacity-80 animate-pulse">&gt; {status}</div>
+          <div className="font-mono text-sm opacity-80 animate-pulse">
+            &gt; {status}
+          </div>
         </div>
 
         {file && !isUploading && (

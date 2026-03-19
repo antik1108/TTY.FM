@@ -11,7 +11,7 @@ describe('Header', () => {
           status: 'OPTIMIZED',
           uptime: '00:10:00',
           nodeLoad: 54,
-          nodeName: 'LOCAL_NODE'
+          nodeName: 'LOCAL_NODE',
         }}
       />
     );
@@ -35,7 +35,7 @@ describe('Header', () => {
           status: 'OPTIMIZED',
           uptime: '00:10:00',
           nodeLoad: 54,
-          nodeName: 'LOCAL_NODE'
+          nodeName: 'LOCAL_NODE',
         }}
       />
     );

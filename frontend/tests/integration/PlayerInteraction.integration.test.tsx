@@ -13,7 +13,7 @@ describe('Player Interaction (Integration)', () => {
       duration: '03:45',
       durationSeconds: 225,
       size: '3.5 MB',
-      genre: 'SYNTH'
+      genre: 'SYNTH',
     },
     {
       id: '2',
@@ -23,8 +23,8 @@ describe('Player Interaction (Integration)', () => {
       duration: '04:20',
       durationSeconds: 260,
       size: '4.2 MB',
-      genre: 'AMBIENT'
-    }
+      genre: 'AMBIENT',
+    },
   ];
 
   it('selects a song from list and controls playback', () => {
@@ -150,7 +150,7 @@ describe('Player Interaction (Integration)', () => {
         height: 10,
         x: 0,
         y: 0,
-        toJSON: () => {}
+        toJSON: () => {},
       }));
 
       // Click at 75% position

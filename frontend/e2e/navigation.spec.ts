@@ -13,7 +13,7 @@ test.describe('Navigation Flow', () => {
 
     // Should show uncategorized playlist title or songs
     await page.waitForTimeout(500); // Wait for state update
-    
+
     // Main content should update
     await expect(page.getByText('TTY.FM')).toBeVisible(); // App still works
   });
@@ -30,13 +30,17 @@ test.describe('Navigation Flow', () => {
 
   test('should navigate to upload panel', async ({ page }) => {
     // Find and click upload button
-    const uploadButton = page.getByText('Upload').or(page.locator('button:has-text("Upload")'));
+    const uploadButton = page
+      .getByText('Upload')
+      .or(page.locator('button:has-text("Upload")'));
     await uploadButton.first().click();
 
     await page.waitForTimeout(500);
 
     // Should show upload interface
-    await expect(page.getByText('Upload Interface').or(page.getByText('Upload'))).toBeVisible();
+    await expect(
+      page.getByText('Upload Interface').or(page.getByText('Upload'))
+    ).toBeVisible();
   });
 
   test('should show playlist creation dialog', async ({ page }) => {
@@ -48,7 +52,9 @@ test.describe('Navigation Flow', () => {
     await expect(page.getByText('TTY.FM')).toBeVisible();
   });
 
-  test('should maintain navigation state on page interactions', async ({ page }) => {
+  test('should maintain navigation state on page interactions', async ({
+    page,
+  }) => {
     // Navigate to library
     await page.getByText('Library_Root').click();
     await page.waitForTimeout(300);

@@ -13,8 +13,10 @@ export const SystemService = {
   async getStats(): Promise<RawSystemStats> {
     const response = await fetch(`${API_BASE}/system/stats`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch system stats: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch system stats: ${response.status} ${response.statusText}`
+      );
     }
     return response.json();
-  }
+  },
 };

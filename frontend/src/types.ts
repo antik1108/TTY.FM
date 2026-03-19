@@ -41,5 +41,5 @@ export interface SystemStats {
 export enum ViewMode {
   LIBRARY = 'LIBRARY',
   UPLOAD = 'UPLOAD',
-  PLAYLIST = 'PLAYLIST'
+  PLAYLIST = 'PLAYLIST',
 }

@@ -4,7 +4,7 @@ on:
   push:
     branches: [ antik-laptop ]
   pull_request:
-    branches: [ antik-laptop ]
+    branches: [ '**' ]
 
 jobs:
   # Backend Testing & Linting
@@ -31,8 +31,11 @@ jobs:
 
       - name: Run backend linter
         working-directory: backend
-        run: |
-          npm run lint 2>/dev/null || echo "ℹ️  No linter configured for backend"
+        run: npm run lint
+
+      - name: Run backend format check (Prettier)
+        working-directory: backend
+        run: npm run format:check
 
       - name: Check for syntax errors
         working-directory: backend
@@ -75,8 +78,11 @@ jobs:
 
       - name: Run Linter (ESLint)
         working-directory: frontend
-        run: |
-          npm run lint 2>/dev/null || echo "ℹ️  No ESLint configured"
+        run: npm run lint
+
+      - name: Run format check (Prettier)
+        working-directory: frontend
+        run: npm run format:check
 
       - name: Run Unit & Integration Tests
         working-directory: frontend

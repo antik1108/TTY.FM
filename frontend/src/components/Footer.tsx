@@ -22,10 +22,12 @@ const Footer: React.FC<FooterProps> = ({
   onSeek,
   volume,
   setVolume,
-  onSongClick
+  onSongClick,
 }) => {
   if (!currentSong) {
-    return <footer className="h-16 border-t-2 border-terminal-border bg-black" />;
+    return (
+      <footer className="h-16 border-t-2 border-terminal-border bg-black" />
+    );
   }
 
   return (
@@ -36,17 +38,26 @@ const Footer: React.FC<FooterProps> = ({
             onClick={onSongClick}
             className="flex flex-col overflow-hidden text-left hover:opacity-80 transition-opacity"
           >
-            <span className="text-[11px] text-white font-bold uppercase truncate">{currentSong.title}</span>
-            <span className="text-[9px] text-neon-purple tracking-widest font-black uppercase">Encrypted_Stream</span>
+            <span className="text-[11px] text-white font-bold uppercase truncate">
+              {currentSong.title}
+            </span>
+            <span className="text-[9px] text-neon-purple tracking-widest font-black uppercase">
+              Encrypted_Stream
+            </span>
           </button>
-          <span className="text-[10px] text-gray-500 tabular-nums font-mono whitespace-nowrap ml-2">{timeLabel}</span>
+          <span className="text-[10px] text-gray-500 tabular-nums font-mono whitespace-nowrap ml-2">
+            {timeLabel}
+          </span>
         </div>
         <div
           className="h-2.5 bg-terminal-border relative rounded-full overflow-hidden cursor-pointer group"
           onClick={(event) => {
             const target = event.currentTarget;
             const rect = target.getBoundingClientRect();
-            const percent = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+            const percent = Math.min(
+              100,
+              Math.max(0, ((event.clientX - rect.left) / rect.width) * 100)
+            );
             onSeek(percent);
           }}
         >
@@ -67,10 +78,16 @@ const Footer: React.FC<FooterProps> = ({
           onClick={onSongClick}
           className="flex-1 flex flex-col overflow-hidden text-left hover:opacity-80 transition-opacity"
         >
-          <span className="text-[13px] text-white font-bold uppercase truncate crt-glow-purple">{currentSong.title}</span>
+          <span className="text-[13px] text-white font-bold uppercase truncate crt-glow-purple">
+            {currentSong.title}
+          </span>
           <div className="flex items-center gap-2">
-            <span className="text-[9px] text-neon-purple tracking-widest font-black uppercase">Playing</span>
-            <span className="text-[9px] text-gray-500 tabular-nums font-mono">{timeLabel}</span>
+            <span className="text-[9px] text-neon-purple tracking-widest font-black uppercase">
+              Playing
+            </span>
+            <span className="text-[9px] text-gray-500 tabular-nums font-mono">
+              {timeLabel}
+            </span>
           </div>
         </button>
 
@@ -78,7 +95,10 @@ const Footer: React.FC<FooterProps> = ({
           onClick={onTogglePlay}
           className="w-12 h-12 flex items-center justify-center bg-neon-purple text-white rounded-full shadow-[0_0_15px_rgba(144,70,255,0.4)] active:scale-95 transition-all border border-white/20"
         >
-          <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <span
+            className="material-symbols-outlined text-[28px]"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
             {isPlaying ? 'pause' : 'play_arrow'}
           </span>
         </button>
@@ -90,18 +110,25 @@ const Footer: React.FC<FooterProps> = ({
         </button>
         <div className="flex items-center gap-4">
           <button className="text-white hover:text-neon-purple transition-colors">
-            <span className="material-symbols-outlined text-[32px]">skip_previous</span>
+            <span className="material-symbols-outlined text-[32px]">
+              skip_previous
+            </span>
           </button>
           <button
             onClick={onTogglePlay}
             className="w-14 h-14 flex items-center justify-center bg-neon-purple text-white rounded-full active:scale-95 transition-all shadow-[0_0_30px_rgba(144,70,255,0.4)] border-2 border-white/10"
           >
-            <span className="material-symbols-outlined text-[36px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+            <span
+              className="material-symbols-outlined text-[36px]"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
               {isPlaying ? 'pause' : 'play_arrow'}
             </span>
           </button>
           <button className="text-white hover:text-neon-purple transition-colors">
-            <span className="material-symbols-outlined text-[32px]">skip_next</span>
+            <span className="material-symbols-outlined text-[32px]">
+              skip_next
+            </span>
           </button>
         </div>
         <button className="text-cyber-cyan hover:text-white transition-colors">
@@ -112,7 +139,11 @@ const Footer: React.FC<FooterProps> = ({
       <div className="hidden md:flex w-full items-center justify-end gap-6">
         <div className="flex items-center gap-3 w-40">
           <span className="material-symbols-outlined text-matrix-green text-xl crt-glow-green">
-            {volume === 0 ? 'volume_off' : volume < 50 ? 'volume_down' : 'volume_up'}
+            {volume === 0
+              ? 'volume_off'
+              : volume < 50
+                ? 'volume_down'
+                : 'volume_up'}
           </span>
           <div className="flex-1 h-2 bg-terminal-border rounded-full overflow-hidden cursor-pointer group relative">
             <input
@@ -123,12 +154,19 @@ const Footer: React.FC<FooterProps> = ({
               onChange={(event) => setVolume(parseInt(event.target.value, 10))}
               className="absolute inset-0 w-full opacity-0 cursor-pointer z-10"
             />
-            <div className="h-full bg-matrix-green crt-glow-green transition-all" style={{ width: `${volume}%` }}></div>
+            <div
+              className="h-full bg-matrix-green crt-glow-green transition-all"
+              style={{ width: `${volume}%` }}
+            ></div>
           </div>
         </div>
         <div className="border-l border-terminal-border pl-4">
-          <span className="block text-[10px] text-neon-purple font-black crt-glow-purple">TTY_NODE_PROC</span>
-          <span className="block text-[8px] text-gray-600 uppercase">Kernel_Latest</span>
+          <span className="block text-[10px] text-neon-purple font-black crt-glow-purple">
+            TTY_NODE_PROC
+          </span>
+          <span className="block text-[8px] text-gray-600 uppercase">
+            Kernel_Latest
+          </span>
         </div>
       </div>
     </footer>

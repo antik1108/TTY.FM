@@ -1,4 +1,3 @@
-
 // const express = require('express');
 // const cors = require('cors');
 // const path = require('path');
@@ -48,25 +47,19 @@
 //     `);
 // });
 
-
-
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-
-
 const { MUSIC_DIR, DATA_DIR, BASE_DIR } = require('./config/paths');
-
 
 // Make paths available to routes
 app.locals.MUSIC_DIR = MUSIC_DIR;
 app.locals.DATA_DIR = DATA_DIR;
-
 
 // ==============================
 // MIDDLEWARE
@@ -77,33 +70,33 @@ app.use(express.json());
 // ==============================
 // STATIC FILES (optional)
 // ==============================
-app.use("/public", express.static(path.join(BASE_DIR, "public")));
+app.use('/public', express.static(path.join(BASE_DIR, 'public')));
 
 // ==============================
 // API ROUTES
 // ==============================
-app.use("/api/library", require("./routes/library.routes"));
-app.use("/api/stream", require("./routes/stream.routes"));
-app.use("/api/upload", require("./routes/upload.routes"));
-app.use("/api/system", require("./routes/system.routes"));
-app.use("/api/playlists", require("./routes/playlist.routes"));
+app.use('/api/library', require('./routes/library.routes'));
+app.use('/api/stream', require('./routes/stream.routes'));
+app.use('/api/upload', require('./routes/upload.routes'));
+app.use('/api/system', require('./routes/system.routes'));
+app.use('/api/playlists', require('./routes/playlist.routes'));
 
 // ==============================
 // HEALTH CHECK
 // ==============================
-app.get("/api/health", (req, res) => {
-    res.json({
-        status: "ONLINE",
-        uptime: process.uptime(),
-        musicDir: MUSIC_DIR
-    });
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ONLINE',
+    uptime: process.uptime(),
+    musicDir: MUSIC_DIR,
+  });
 });
 
 // ==============================
 // ROOT (STATUS PAGE)
 // ==============================
-app.get("/", (req, res) => {
-    res.send(`
+app.get('/', (req, res) => {
+  res.send(`
     <body style="background:black; color:#9046FF; font-family:monospace; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
       <div style="text-align:center;">
         <h1>TTY.FM MAINFRAME</h1>
@@ -123,7 +116,7 @@ app.get("/", (req, res) => {
 // START SERVER
 // ==============================
 app.listen(PORT, () => {
-    console.log(`
+  console.log(`
 ┌───────────────────────────────┐
 │  TTY.FM SYSTEM SERVICE        │
 │  STATUS: ONLINE               │

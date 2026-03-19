@@ -7,7 +7,11 @@ interface RightPanelProps {
   isPlaying: boolean;
 }
 
-const RightPanel: React.FC<RightPanelProps> = ({ currentSong, neuralInsight, isPlaying }) => {
+const RightPanel: React.FC<RightPanelProps> = ({
+  currentSong,
+  neuralInsight,
+  isPlaying,
+}) => {
   if (!currentSong) {
     return (
       <div className="flex-1 flex flex-col overflow-hidden h-full">
@@ -32,17 +36,25 @@ const RightPanel: React.FC<RightPanelProps> = ({ currentSong, neuralInsight, isP
           <div
             className={`absolute inset-0 animate-spin-slow opacity-40 transition-opacity ${isPlaying ? 'opacity-40' : 'opacity-10'}`}
             style={{
-              background: 'radial-gradient(circle, transparent 40%, rgba(144, 70, 255, 0.2) 41%, transparent 42%, transparent 48%, rgba(144, 70, 255, 0.2) 49%, transparent 50%)',
-              backgroundSize: '30px 30px'
+              background:
+                'radial-gradient(circle, transparent 40%, rgba(144, 70, 255, 0.2) 41%, transparent 42%, transparent 48%, rgba(144, 70, 255, 0.2) 49%, transparent 50%)',
+              backgroundSize: '30px 30px',
             }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/20 to-transparent"></div>
 
           {/* Mobile Ripple Effect */}
-          <div className={`absolute inset-0 rounded-full border border-neon-purple opacity-0 ${isPlaying ? 'animate-ping' : ''}`}></div>
+          <div
+            className={`absolute inset-0 rounded-full border border-neon-purple opacity-0 ${isPlaying ? 'animate-ping' : ''}`}
+          ></div>
 
-          <div className={`z-10 text-neon-purple transition-all duration-700 ${isPlaying ? 'animate-pulse crt-glow-purple scale-110' : 'opacity-50 scale-100'}`}>
-            <span className="material-symbols-outlined text-8xl md:text-8xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <div
+            className={`z-10 text-neon-purple transition-all duration-700 ${isPlaying ? 'animate-pulse crt-glow-purple scale-110' : 'opacity-50 scale-100'}`}
+          >
+            <span
+              className="material-symbols-outlined text-8xl md:text-8xl"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
               {isPlaying ? 'slow_motion_video' : 'adjust'}
             </span>
           </div>
@@ -58,15 +70,20 @@ const RightPanel: React.FC<RightPanelProps> = ({ currentSong, neuralInsight, isP
         </div>
 
         <div className="w-full bg-black/60 p-4 rounded border border-terminal-border mb-8">
-          <div className="text-[8px] text-gray-600 mb-2 uppercase font-black">Neural Link Analysis</div>
-          <div className="text-[10px] leading-relaxed text-cyber-cyan font-mono italic">&gt; {neuralInsight}</div>
+          <div className="text-[8px] text-gray-600 mb-2 uppercase font-black">
+            Neural Link Analysis
+          </div>
+          <div className="text-[10px] leading-relaxed text-cyber-cyan font-mono italic">
+            &gt; {neuralInsight}
+          </div>
         </div>
 
         <div className="w-full h-32 md:h-20 flex items-end justify-between gap-1 px-1 relative overflow-hidden bg-black/40 rounded border border-terminal-border/40 backdrop-blur-sm">
           <div
             className="absolute inset-0 pointer-events-none z-10"
             style={{
-              background: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.2) 1px, rgba(0,0,0,0.2) 2px)'
+              background:
+                'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.2) 1px, rgba(0,0,0,0.2) 2px)',
             }}
           ></div>
           {[...Array(16)].map((_, i) => (
@@ -76,8 +93,10 @@ const RightPanel: React.FC<RightPanelProps> = ({ currentSong, neuralInsight, isP
               style={{
                 height: `${isPlaying ? Math.random() * 90 + 10 : 5}%`,
                 opacity: (i + 5) / 20,
-                boxShadow: isPlaying ? '0 0 15px rgba(144, 70, 255, 0.6)' : 'none',
-                animationDelay: `-${Math.random()}s`
+                boxShadow: isPlaying
+                  ? '0 0 15px rgba(144, 70, 255, 0.6)'
+                  : 'none',
+                animationDelay: `-${Math.random()}s`,
               }}
             ></div>
           ))}

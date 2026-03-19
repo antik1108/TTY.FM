@@ -11,7 +11,9 @@ const SystemLogs: React.FC<SystemLogsProps> = ({ logs }) => {
     <div className="h-full flex flex-col overflow-hidden">
       <div className="bg-terminal-border/40 px-4 py-2 flex justify-between items-center text-[10px] uppercase font-bold text-neon-purple border-b-2 border-terminal-border crt-glow-purple">
         <span>System Event Log</span>
-        <span className="text-[9px] text-matrix-green animate-blink">RUNNING_DAEMON</span>
+        <span className="text-[9px] text-matrix-green animate-blink">
+          RUNNING_DAEMON
+        </span>
       </div>
       <div className="flex-1 p-4 text-[11px] font-mono leading-relaxed overflow-y-auto custom-scrollbar bg-black/80">
         <div className="space-y-1">
@@ -23,7 +25,11 @@ const SystemLogs: React.FC<SystemLogsProps> = ({ logs }) => {
               </span>
             </div>
           ))}
-          {logs.length === 0 && <div className="text-gray-600 italic">INITIALIZING_LOG_STREAM...</div>}
+          {logs.length === 0 && (
+            <div className="text-gray-600 italic">
+              INITIALIZING_LOG_STREAM...
+            </div>
+          )}
         </div>
       </div>
     </div>

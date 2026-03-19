@@ -6,30 +6,42 @@ export const LibraryService = {
   async getSongs(): Promise<Song[]> {
     const response = await fetch(`${API_BASE}/library`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch library: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch library: ${response.status} ${response.statusText}`
+      );
     }
     return response.json();
   },
 
   async refreshLibrary(): Promise<void> {
-    const response = await fetch(`${API_BASE}/library/refresh`, { method: 'POST' });
+    const response = await fetch(`${API_BASE}/library/refresh`, {
+      method: 'POST',
+    });
     if (!response.ok) {
-      throw new Error(`Failed to refresh library: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to refresh library: ${response.status} ${response.statusText}`
+      );
     }
   },
 
   async getPlaylists(): Promise<PlaylistsResponse> {
     const response = await fetch(`${API_BASE}/playlists`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch playlists: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch playlists: ${response.status} ${response.statusText}`
+      );
     }
     return response.json();
   },
 
   async getPlaylistSongs(playlistName: string): Promise<Song[]> {
-    const response = await fetch(`${API_BASE}/playlists/${encodeURIComponent(playlistName)}/songs`);
+    const response = await fetch(
+      `${API_BASE}/playlists/${encodeURIComponent(playlistName)}/songs`
+    );
     if (!response.ok) {
-      throw new Error(`Failed to fetch playlist: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch playlist: ${response.status} ${response.statusText}`
+      );
     }
     return response.json();
   },
@@ -38,26 +50,36 @@ export const LibraryService = {
     const response = await fetch(`${API_BASE}/playlists`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
+      body: JSON.stringify({ name }),
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create playlist: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to create playlist: ${response.status} ${response.statusText}`
+      );
     }
 
     const data = await response.json();
     return data.playlist as Playlist;
   },
 
-  async renamePlaylist(oldName: string, newName: string): Promise<{ oldName: string; newName: string }> {
-    const response = await fetch(`${API_BASE}/playlists/${encodeURIComponent(oldName)}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newName })
-    });
+  async renamePlaylist(
+    oldName: string,
+    newName: string
+  ): Promise<{ oldName: string; newName: string }> {
+    const response = await fetch(
+      `${API_BASE}/playlists/${encodeURIComponent(oldName)}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newName }),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`Failed to rename playlist: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to rename playlist: ${response.status} ${response.statusText}`
+      );
     }
 
     return response.json();
@@ -74,11 +96,13 @@ export const LibraryService = {
     const query = playlist ? `?playlist=${encodeURIComponent(playlist)}` : '';
     const response = await fetch(`${API_BASE}/upload${query}`, {
       method: 'POST',
-      body: formData
+      body: formData,
     });
 
     if (!response.ok) {
-      throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Upload failed: ${response.status} ${response.statusText}`
+      );
     }
-  }
+  },
 };
