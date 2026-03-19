@@ -174,6 +174,19 @@ cleanup_ports() {
     log_success "Ports cleared"
 }
 
+# Check if port is listening
+is_port_listening() {
+    if command_exists nc; then
+        nc -z localhost "$1" 2>/dev/null
+        return $?
+    elif command_exists lsof; then
+        lsof -i ":$1" &>/dev/null
+        return $?
+    else
+        return 0  # Can't check, assume OK
+    fi
+}
+
 # Start the servers
 start_servers() {
     echo ""
@@ -183,18 +196,34 @@ start_servers() {
     echo ""
     
     # Start backend in background
-    log_info "Starting backend server..."
+    log_info "Starting backend server on port 3001..."
     cd "$BACKEND_DIR"
     npm start &
     BACKEND_PID=$!
     sleep 2
     
+    # Verify backend started
+    if ! is_port_listening 3001; then
+        log_error "Backend failed to start on port 3001"
+        log_error "Check: cd backend && node src/server.js"
+        kill $BACKEND_PID 2>/dev/null
+        exit 1
+    fi
+    log_success "Backend is running on port 3001"
+    
     # Start frontend in background
-    log_info "Starting frontend server..."
+    log_info "Starting frontend server on port 3000..."
     cd "$FRONTEND_DIR"
     npm run dev -- --host &
     FRONTEND_PID=$!
     sleep 3
+    
+    # Verify frontend started
+    if ! is_port_listening 3000; then
+        log_warning "Frontend may have failed to start. Check output above."
+    else
+        log_success "Frontend is running on port 3000"
+    fi
     
     echo ""
     echo -e "${GREEN}┌───────────────────────────────────────┐${NC}"
