@@ -1,5 +1,5 @@
 // Mock data for integration tests
-import { Song, Playlist, SystemStats, PlaylistsResponse } from '../../types';
+import { Song, Playlist, SystemStats, PlaylistsResponse } from '@/types';
 
 export const mockSongs: Song[] = [
   {
