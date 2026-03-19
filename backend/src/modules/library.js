@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const mm = require('music-metadata');
 
 
-const { MUSIC_DIR, DATA_DIR, LIBRARY_FILE, getPlaylistFolders, getPlaylistPath } = require('../paths');
+const { MUSIC_DIR, DATA_DIR, LIBRARY_FILE, getPlaylistFolders, getPlaylistPath } = require('../config/paths');
 
 // Ensure directories exist
 if (!fs.existsSync(MUSIC_DIR)) fs.mkdirSync(MUSIC_DIR, { recursive: true });

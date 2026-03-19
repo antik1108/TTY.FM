@@ -2,10 +2,10 @@
 const path = require('path');
 const fs = require('fs');
 
-const BASE_DIR = __dirname;
+const BASE_DIR = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.join(BASE_DIR, "data");
 // User configured music directory (contains playlist folders)
-const MUSIC_DIR = path.join(process.env.HOME, "tty-fm", "music");
+const MUSIC_DIR = path.join(process.env.HOME || process.env.USERPROFILE || '', "tty-fm", "music");
 
 // Ensure directories exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });

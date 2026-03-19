@@ -1,7 +1,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { MUSIC_DIR, getPlaylistPath } = require('../paths');
+const { MUSIC_DIR, getPlaylistPath } = require('../config/paths');
 
 
 const StreamerModule = {

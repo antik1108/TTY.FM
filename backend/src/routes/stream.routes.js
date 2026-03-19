@@ -1,8 +1,8 @@
 
 const express = require('express');
 const router = express.Router();
-const LibraryModule = require('../core/library');
-const StreamerModule = require('../core/streamer');
+const LibraryModule = require('../modules/library');
+const StreamerModule = require('../modules/streamer');
 
 router.get('/:id', (req, res) => {
     const songId = req.params.id;

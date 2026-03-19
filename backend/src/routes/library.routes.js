@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const LibraryModule = require('../core/library');
+const LibraryModule = require('../modules/library');
 
 router.get('/', (req, res) => {
     const library = LibraryModule.getLibrary();

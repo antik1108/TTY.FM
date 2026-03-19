@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { LibraryService } from '../../services/LibraryService';
-import { SystemService } from '../../services/SystemService';
-import Header from '../../components/Header';
-import { Song, SystemStats } from '../../types';
+import { LibraryService } from '../../src/services/LibraryService';
+import { SystemService } from '../../src/services/SystemService';
+import Header from '../../src/components/Header';
+import { Song, SystemStats } from '../../src/types';
 
 // Mock the services
-jest.mock('../../services/LibraryService');
-jest.mock('../../services/SystemService');
+jest.mock('../../src/services/LibraryService');
+jest.mock('../../src/services/SystemService');
 
 describe('API Integration Tests', () => {
   beforeEach(() => {

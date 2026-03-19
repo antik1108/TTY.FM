@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import Footer from '../../components/Footer';
-import MainContent from '../../components/MainContent';
-import { Song } from '../../types';
+import Footer from '../../src/components/Footer';
+import MainContent from '../../src/components/MainContent';
+import { Song } from '../../src/types';
 
 describe('Player Interaction (Integration)', () => {
   const mockSongs: Song[] = [

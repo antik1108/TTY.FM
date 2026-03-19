@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const LibraryModule = require('../core/library');
+const LibraryModule = require('../modules/library');
 
 
-const { MUSIC_DIR, ensurePlaylistExists, getPlaylistPath } = require('../paths');
+const { MUSIC_DIR, ensurePlaylistExists } = require('../config/paths');
 
 // Configure storage - dynamic destination based on playlist
 const storage = multer.diskStorage({

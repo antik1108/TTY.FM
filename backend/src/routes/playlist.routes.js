@@ -4,8 +4,8 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-const { MUSIC_DIR, getPlaylistFolders, ensurePlaylistExists, getPlaylistPath } = require('../paths');
-const LibraryModule = require('../core/library');
+const { MUSIC_DIR, getPlaylistFolders, ensurePlaylistExists, getPlaylistPath } = require('../config/paths');
+const LibraryModule = require('../modules/library');
 
 // GET /api/playlists - List all playlists with song counts
 router.get('/', (req, res) => {

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import Sidebar from '../../components/Sidebar';
-import MainContent from '../../components/MainContent';
-import { Playlist, Song, ViewMode } from '../../types';
+import Sidebar from '../../src/components/Sidebar';
+import MainContent from '../../src/components/MainContent';
+import { Playlist, Song, ViewMode } from '../../src/types';
 
 describe('Navigation Flow (Integration)', () => {
   const mockPlaylists: Playlist[] = [
